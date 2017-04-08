@@ -22,7 +22,7 @@ NON_STANDARD_IMAGES = browser-asmjs manylinux-x64 manylinux-x86
 IMAGES = $(STANDARD_IMAGES) $(NON_STANDARD_IMAGES)
 
 # Optional arguments for test runner (test/run.py) associated with "testing implicit rule"
-linux-arm-cortex.test_ARGS = --languages C --build-systems CMake # --emulator "/usr/bin/qemu-arm -cpu cortex-m3"
+linux-arm-cortex.test_ARGS = --languages C --build-systems CMake --emulator "/usr/bin/qemu-arm "
 linux-ppc64le.test_ARGS = --languages C
 windows-x86.test_ARGS = --exe-suffix ".exe"
 windows-x64.test_ARGS = --exe-suffix ".exe"
@@ -113,6 +113,7 @@ Dockerfile: Dockerfile.in common.docker common.debian
 	sed -e '/common.docker/ r common.docker' -e '/common.debian/ r common.debian' Dockerfile.in > Dockerfile
 
 base: Dockerfile imagefiles/
+	# $(DOCKER) pull $(ORG)/base
 	$(DOCKER) build -t $(ORG)/base \
 		--build-arg IMAGE=$(ORG)/base \
 		--build-arg VCS_URL=`git config --get remote.origin.url` \
